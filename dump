@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+import os
+import pyperclip
+import sys
+import argparse
+
+def gather_files(directory='.', extensions=None):
+    if extensions is None:
+        extensions = ['.py']
+    files = []
+    for root, _, filenames in os.walk(directory):
+        for filename in filenames:
+            if any(filename.endswith(ext) for ext in extensions):
+                files.append(os.path.join(root, filename))
+    return files
+
+def format_file_content(file_path):
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+            return f"# {file_path}\n--------\n{content}\n--------\n"
+    except Exception as e:
+        return f"# {file_path}\n--------\nError reading file: {e}\n--------\n"
+
+def copy_to_clipboard(output_text):
+    try:
+        pyperclip.copy(output_text)
+        return True
+    except pyperclip.PyperclipException:
+        return False
+
+def main(directory='.', extensions=None):
+    files = gather_files(directory, extensions)
+    output_text = "".join([format_file_content(f) for f in files])
+    if copy_to_clipboard(output_text):
+        return output_text, "Content copied to clipboard."
+    return output_text, "Could not copy to clipboard."
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Recursively list files with specific extensions and format content.")
+    parser.add_argument('extensions', nargs='*', default=['.py'], help='File extensions to search for.')
+    args = parser.parse_args()
+    
+    output, clipboard_msg = main(extensions=args.extensions)
+    print(output)
+    print(clipboard_msg)
