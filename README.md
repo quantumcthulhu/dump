@@ -1,6 +1,6 @@
 # File Listing and Clipboard Script
 
-This script scans the current directory (and subdirectories) for files with specific extensions, formats their content, and copies the output to the clipboard (if possible). The default file extension is `.py`, but you can pass custom extensions as command\-line arguments.
+This script scans the current directory (and subdirectories) for files with specific extensions, formats their content, and copies the output to the clipboard (if possible) to use in a prompt in LLM interface like ChatGPT. By default it searches for all source files, but you can pass custom extensions as command\-line arguments.
 
 ## Features
 
@@ -16,18 +16,22 @@ This script scans the current directory (and subdirectories) for files with spec
     ```bash
     pip install -r requirements.txt
     ```
-3. Chmod +x and put to dir accessible via $PATH
+3. Install
+
+   ```bash
+   chmod +x dump && cp dump ~/.local/bin
+   ```
 
 ## Usage
 
-Run the script to search for Python files (default):
+Run the script to search for source files:
 
-    ```bash
-    dump
-    ```
+```bash
+dump
+```
 
 To search for other file extensions, pass them as arguments:
 
-    ```bash
-    dump .txt .md .json
-    ```
+```bash
+dump .txt .md .html
+```
