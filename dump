@@ -5,7 +5,8 @@ import argparse
 
 DEFAULT_EXTENSIONS = ['.py', '.cpp', '.hpp', '.c', '.h', '.java', 
                       '.js', '.ts', '.tsx', '.cs', '.aspx', 
-                      '.php', '.rb', '.go', '.rs', '.swift', '.kt']
+                      '.php', '.rb', '.go', '.rs', '.swift', '.kt',
+                      '.yml', '.yaml', 'Dockerfile']
 
 def gather_files(directory='.', extensions=None):
     files = []
