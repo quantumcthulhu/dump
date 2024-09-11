@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 import os
 import pyperclip
-import sys
 import argparse
 
+DEFAULT_EXTENSIONS = ['.py', '.cpp', '.hpp', '.c', '.h', '.java', 
+                      '.js', '.ts', '.tsx', '.cs', '.aspx', 
+                      '.php', '.rb', '.go', '.rs', '.swift', '.kt']
+
 def gather_files(directory='.', extensions=None):
-    if extensions is None:
-        extensions = ['.py']
     files = []
     for root, _, filenames in os.walk(directory):
         for filename in filenames:
-            if any(filename.endswith(ext) for ext in extensions):
+            if extensions is None or any(filename.endswith(ext) for ext in extensions):
                 files.append(os.path.join(root, filename))
     return files
 
@@ -36,11 +37,14 @@ def main(directory='.', extensions=None):
         return output_text, "Content copied to clipboard."
     return output_text, "Could not copy to clipboard."
 
+# Argument parsing and script execution
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Recursively list files with specific extensions and format content.")
-    parser.add_argument('extensions', nargs='*', default=['.py'], help='File extensions to search for.')
+    parser = argparse.ArgumentParser(description="Recursively list source files and format their content.")
+    parser.add_argument('extensions', nargs='*', default=DEFAULT_EXTENSIONS, 
+                        help='Optional: Specify file extensions to search for (e.g., .py .cpp). Defaults to common source file types.')
     args = parser.parse_args()
     
-    output, clipboard_msg = main(extensions=args.extensions)
+    extensions = args.extensions if args.extensions else DEFAULT_EXTENSIONS
+    output, clipboard_msg = main(extensions=extensions)
     print(output)
     print(clipboard_msg)
