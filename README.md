@@ -2,12 +2,6 @@
 
 This script scans the current directory (and subdirectories) for files with specific extensions, formats their content, and copies the output to the clipboard (if possible) to use in a prompt in LLM interface like ChatGPT. By default it searches for all source files, but you can pass custom extensions as command\-line arguments.
 
-## Features
-
-- Recursively searches for files by extension.  
-- Formats the file content with clear delimiters.  
-- Copies the output to the clipboard (requires `pyperclip`).
-
 ## Installation
 
 1. Clone the repository.
