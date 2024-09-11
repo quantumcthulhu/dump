@@ -10,13 +10,16 @@ This script scans the current directory (and subdirectories) for files with spec
 
 ## Installation
 
-1. Clone the repository.  
-2. Install required dependencies:
+1. Clone the repository.
+   ```bash
+   git clone https://github.com/quantumcthulhu/dump
+   ```
+3. Install required dependencies:
 
     ```bash
-    pip install -r requirements.txt
+    cd dump && pip install -r requirements.txt
     ```
-3. Install
+4. Install
 
    ```bash
    chmod +x dump && cp dump ~/.local/bin
