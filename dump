@@ -8,11 +8,14 @@ DEFAULT_EXTENSIONS = ['.py', '.cpp', '.hpp', '.c', '.h', '.java',
                       '.php', '.rb', '.go', '.rs', '.swift', '.kt',
                       '.yml', '.yaml', 'Dockerfile']
 
+SKIP_DIRS = ['node_modules', 'build']
+
 def gather_files(directory='.', extensions=None):
     files = []
     for root, dirs, filenames in os.walk(directory):
-        if 'node_modules' in dirs:
-            dirs.remove('node_modules')
+        for skip_name in SKIP_DIRS:
+            if skip_name in dirs:
+                dirs.remove(skip_name)
         for filename in filenames:
             if extensions is None or any(filename.endswith(ext) for ext in extensions):
                 files.append(os.path.join(root, filename))
