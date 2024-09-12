@@ -10,7 +10,7 @@ DEFAULT_EXTENSIONS = ['.py', '.cpp', '.hpp', '.c', '.h', '.java',
 
 def gather_files(directory='.', extensions=None):
     files = []
-    for root, _, filenames in os.walk(directory):
+    for root, dirs, filenames in os.walk(directory):
         if 'node_modules' in dirs:
             dirs.remove('node_modules')
         for filename in filenames:
