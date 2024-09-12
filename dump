@@ -11,6 +11,8 @@ DEFAULT_EXTENSIONS = ['.py', '.cpp', '.hpp', '.c', '.h', '.java',
 def gather_files(directory='.', extensions=None):
     files = []
     for root, _, filenames in os.walk(directory):
+        if 'node_modules' in dirs:
+            dirs.remove('node_modules')
         for filename in filenames:
             if extensions is None or any(filename.endswith(ext) for ext in extensions):
                 files.append(os.path.join(root, filename))
