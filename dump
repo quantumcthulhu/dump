@@ -40,8 +40,8 @@ def main(directory='.', extensions=None):
     files = gather_files(directory, extensions)
     output_text = "".join([format_file_content(f) for f in files])
     if copy_to_clipboard(output_text):
-        return output_text, "Content copied to clipboard."
-    return output_text, "Could not copy to clipboard."
+        return output_text, f"{len(output_text)} bytes copied to clipboard."
+    return output_text, f"{len(output_text)} bytes could not copy to clipboard."
 
 # Argument parsing and script execution
 if __name__ == "__main__":
