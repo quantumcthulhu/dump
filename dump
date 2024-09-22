@@ -8,14 +8,16 @@ DEFAULT_EXTENSIONS = ['.py', '.cpp', '.hpp', '.c', '.h', '.java',
                       '.php', '.rb', '.go', '.rs', '.swift', '.kt',
                       '.yml', '.yaml', 'Dockerfile']
 
-SKIP_DIRS = ['node_modules', 'build']
+# Initial directories to skip
+DEFAULT_SKIP_DIRS = ['node_modules', 'build']
 
-def gather_files(directory='.', extensions=None):
+def gather_files(directory='.', extensions=None, skip_dirs=None):
+    if skip_dirs is None:
+        skip_dirs = []
     files = []
     for root, dirs, filenames in os.walk(directory):
-        for skip_name in SKIP_DIRS:
-            if skip_name in dirs:
-                dirs.remove(skip_name)
+        # Modify dirs in-place to skip specified directories
+        dirs[:] = [d for d in dirs if d not in skip_dirs]
         for filename in filenames:
             if extensions is None or any(filename.endswith(ext) for ext in extensions):
                 files.append(os.path.join(root, filename))
@@ -36,8 +38,8 @@ def copy_to_clipboard(output_text):
     except pyperclip.PyperclipException:
         return False
 
-def main(directory='.', extensions=None):
-    files = gather_files(directory, extensions)
+def main(directory='.', extensions=None, skip_dirs=None):
+    files = gather_files(directory, extensions, skip_dirs)
     output_text = "".join([format_file_content(f) for f in files])
     if copy_to_clipboard(output_text):
         return output_text, f"{len(output_text)} bytes copied to clipboard."
@@ -45,12 +47,36 @@ def main(directory='.', extensions=None):
 
 # Argument parsing and script execution
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Recursively list source files and format their content.")
-    parser.add_argument('extensions', nargs='*', default=DEFAULT_EXTENSIONS, 
-                        help='Optional: Specify file extensions to search for (e.g., .py .cpp). Defaults to common source file types.')
+    parser = argparse.ArgumentParser(
+        description="Recursively list source files and format their content."
+    )
+    parser.add_argument(
+        'extensions', 
+        nargs='*', 
+        default=DEFAULT_EXTENSIONS, 
+        help='Optional: Specify file extensions to search for (e.g., .py .cpp). Defaults to common source file types.'
+    )
+    parser.add_argument(
+        '-s', '--skip',
+        nargs='+',
+        default=[],
+        help='Optional: Specify directory names to skip (e.g., --skip build dist).'
+    )
+    parser.add_argument(
+        '-d', '--directory',
+        default='.',
+        help='Optional: Specify the root directory to search. Defaults to current directory.'
+    )
+    
     args = parser.parse_args()
     
+    combined_skip_dirs = DEFAULT_SKIP_DIRS + args.skip
+
     extensions = args.extensions if args.extensions else DEFAULT_EXTENSIONS
-    output, clipboard_msg = main(extensions=extensions)
+    output, clipboard_msg = main(
+        directory=args.directory,
+        extensions=extensions,
+        skip_dirs=combined_skip_dirs
+    )
     print(output)
     print(clipboard_msg)
