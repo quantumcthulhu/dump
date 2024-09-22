@@ -32,3 +32,9 @@ To search for other file extensions, pass them as arguments:
 ```bash
 dump .txt .md .html
 ```
+
+To skip some dir (by default it skips 'node_modules' and 'build'):
+
+```bash
+dump -s vendors
+```
